@@ -11,19 +11,14 @@ import { addPaymentAsync, showPayment } from '../../../redux/payment-api-slice';
 const steps = ['Shipping Address', 'Payment Details']
 
 
-const Checkout = ({ props, cart, order, onCaptureCheckout, error }) => {
+const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     const [activeStep, setActiveStep] = useState(0);
     const [checkoutToken, setCheckoutToken] = useState(null);
     const [shippingData, setShippingData] = useState({});
     const payment = useSelector(showPayment);
     const dispatch = useDispatch();
-    const [newPaymentIntent, setNewPaymentIntent] = useState({
-        id: '',
-        payment: '',
-    })
     const classes = useStyles();
     const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
-    
     useEffect(() => {
         const generateToken = async () => {
             try {
@@ -60,7 +55,7 @@ const Checkout = ({ props, cart, order, onCaptureCheckout, error }) => {
 
     const Form = () => (activeStep === 0)
         ? <AddressForm cart={cart} checkoutToken={checkoutToken} next={next}/>
-        : <PaymentForm checkoutToken={checkoutToken} payment={payment} />;
+        : <PaymentForm checkoutToken={checkoutToken} payment={payment} onCaptureCheckout={onCaptureCheckout} backStep={backStep} nextStep={nextStep}/>;
 
   return (
     <>
