@@ -6,16 +6,16 @@ import Review from './Checkout/Review';
 
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptureCheckout }) => {
+const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptureCheckout, payment }) => {
 
     const [paymentIntent, setPaymentIntent] = useState('');
     const [paymentId, setPaymentId] = useState('');
-
+    console.log(payment);
 
     
     const options = {
         // passing the client secret obtained in step 2
-        clientSecret: paymentIntent,
+        clientSecret: payment[0].paymentIntent,
     };
 
     const handleSubmit = async (event, elements, stripe) => {
@@ -56,7 +56,7 @@ const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptur
       <Elements stripe={stripePromise} options={options}>
             <form>
                 <PaymentElement />
-                <Button>Submit</Button>
+                <button>Submit</button>
             </form>
       </Elements>
     </>

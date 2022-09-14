@@ -60,7 +60,7 @@ const Checkout = ({ props, cart, order, onCaptureCheckout, error }) => {
 
     const Form = () => (activeStep === 0)
         ? <AddressForm cart={cart} checkoutToken={checkoutToken} next={next}/>
-        : <PaymentForm checkoutToken={checkoutToken}/>;
+        : <PaymentForm checkoutToken={checkoutToken} payment={payment} />;
 
   return (
     <>
