@@ -7,18 +7,30 @@ import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../PaymentForm';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPaymentAsync, showPayment } from '../../../redux/payment-api-slice';
-
-const steps = ['Shipping Address', 'Payment Details']
+import { Elements } from '@stripe/react-stripe-js';
+const steps = ['Shipping Address', 'Payment Details', 'Confirmation']
 
 
 const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     const [activeStep, setActiveStep] = useState(0);
     const [checkoutToken, setCheckoutToken] = useState(null);
     const [shippingData, setShippingData] = useState({});
-    const payment = useSelector(showPayment);
-    const dispatch = useDispatch();
     const classes = useStyles();
     const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
+    const payment = useSelector(showPayment);
+    const dispatch = useDispatch();
+ 
+
+    
+    const options = {
+        // passing the client secret obtained in step 2
+        clientSecret: payment.paymentIntent,
+    };
+
+    const addPaymentIntent = () => {
+        dispatch(addPaymentAsync(checkoutToken));
+    };
+
     useEffect(() => {
         const generateToken = async () => {
             try {
@@ -44,9 +56,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
             Confirmation
         </div>
     )
-    const addPaymentIntent = () => {
-        dispatch(addPaymentAsync(checkoutToken));
-    };
+
     
     useEffect(() => {
         addPaymentIntent();
@@ -55,7 +65,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
 
     const Form = () => (activeStep === 0)
         ? <AddressForm cart={cart} checkoutToken={checkoutToken} next={next}/>
-        : <PaymentForm checkoutToken={checkoutToken} payment={payment} onCaptureCheckout={onCaptureCheckout} backStep={backStep} nextStep={nextStep}/>;
+        : <Elements stripe={stripePromise} options={options}><PaymentForm checkoutToken={checkoutToken} payment={payment} onCaptureCheckout={onCaptureCheckout} backStep={backStep} nextStep={nextStep}/></Elements>;
 
   return (
     <>

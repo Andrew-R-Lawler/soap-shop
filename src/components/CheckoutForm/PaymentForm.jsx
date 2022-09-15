@@ -1,37 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Typography, Button, Divider } from '@material-ui/core';
-import { Elements, PaymentElement, ElementsConsumer } from '@stripe/react-stripe-js';
+import { Elements, PaymentElement, ElementsConsumer, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import Review from './Checkout/Review';
 
 const stripe = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
 const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptureCheckout, payment }) => {
-
+    const stripe = useStripe();
+    const elements = useElements(PaymentElement);
     const [paymentIntent, setPaymentIntent] = useState('');
     const [paymentId, setPaymentId] = useState('');
-    console.log(payment);
-
-    
-    const options = {
-        // passing the client secret obtained in step 2
-        clientSecret: payment[0].paymentIntent,
-    };
-
     const handleSubmit = async (event) => {
     event.preventDefault();
 
     if (!stripe || !elements) return;
 
-    const elements = elements.getElement(PaymentElement);
-
     const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-            return_url: 'http://localhost:3001',
+            redirect: 'if_required',
         }
-    });
+    })
 
+    const paymentMethod = await stripe.paymentMethods.retrieve(
+        payment.paymentIntent
+    );
+
+    console.log(paymentMethod);
     if (error) {
       console.log('[error]', error);
     } else {
@@ -47,6 +43,7 @@ const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptur
           },
         },
       };
+      console.log(orderData);
       onCaptureCheckout(checkoutToken.id, orderData);
       nextStep();
     };
@@ -58,9 +55,6 @@ const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptur
       <Review checkoutToken={checkoutToken} />
       <Divider />
       <Typography variant="h6" gutterBottom style={{ margin: '20px 0' }}>Payment method</Typography>
-      <Elements stripe={stripe} options={options}>
-        <ElementsConsumer>
-        {({ elements, stripe }) => (
             <form onSubmit = {handleSubmit}>
                 <PaymentElement />
                 <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px 0'}}>
@@ -68,9 +62,6 @@ const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptur
                 <Button type="submit" variant="contained" color="primary">Pay {checkoutToken.subtotal.formatted_with_symbol}</Button>
                 </div>
             </form>
-        )} 
-        </ElementsConsumer>
-      </Elements>
     </>
   );
 };

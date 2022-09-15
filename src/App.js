@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { commerce } from './lib/commerce';
 import { Cart, Products, Navbar, Checkout } from './components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { addPaymentAsync, showPayment } from './redux/payment-api-slice';
+import Confirmation from './components/CheckoutForm/Confirmation';
 
 const App = () => {
     const [cart, setCart] = useState({});
     const [products, setProducts] = useState ([]);
     const [order, setOrder] = useState({});
     const [errorMessage, setErrorMessage] = useState('');
+
+
 
 
     const fetchProducts = async () => {
@@ -45,9 +49,9 @@ const App = () => {
         setCart(newCart);
     }
 
-    const handleCaptureCheckout = async (checkoutTokenId, newOrder) => {
+    const handleCaptureCheckout = async (checkoutToken, newOrder) => {
         try {
-            const incomingOrder = await commerce.checkout.capture(checkoutTokenId, newOrder);
+            const incomingOrder = await commerce.checkout.capture(checkoutToken.id, newOrder);
             setOrder(incomingOrder);
             refreshCart();
         } catch (error) {
@@ -63,11 +67,13 @@ const App = () => {
   return (
     <Router>
         <div>
-                <Navbar cart={cart} />
+        {console.log(order)}
+                <Navbar cart={cart} refreshCart={refreshCart}/>
             <Routes>
                 <Route path='/' element={<Products products={products} onAddToCart={handleAddToCart}/>} />
                 <Route path='/cart' element={<Cart cart={cart} handleUpdateCartQty={handleUpdateCartQty} handleRemoveFromCart={handleRemoveFromCart} handleEmptyCart={handleEmptyCart} />} />
                 <Route path='/checkout' element={<Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />}/>
+                <Route path='/confirmation' element={<Confirmation />} />
             </Routes>
         </div>
     </Router>

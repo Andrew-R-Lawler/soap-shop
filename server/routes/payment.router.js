@@ -5,8 +5,8 @@ const Stripe = require('stripe')
 const stripe = Stripe('sk_test_51LgN3XGgp3GmJutylJb1ddRJLyrnofCLcRyJEO25EQrpANTlgqGSI94nF3C3CQHqPsQIh540TXtK2Fyc4hRsnAh600tKpD6eLE');
 
 router.post("/", async (req, res) => {
-    const cartTotal = req.body.total.raw *100;
-    console.log(req.body.total.raw * 100);
+    const cartTotal = req.body.total.raw * 100;
+    console.log(req.body.total.raw * 100)
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
       amount: cartTotal,
