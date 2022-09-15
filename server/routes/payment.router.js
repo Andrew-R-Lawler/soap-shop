@@ -26,7 +26,6 @@ router.post("/success", async(req, res) =>{
     res.send({
         success: paymentIntent.payment_method,
     });
-    console.log(paymentIntent.payment_method);
 });
 
 module.exports = router;
