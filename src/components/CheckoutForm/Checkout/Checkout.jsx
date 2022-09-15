@@ -24,7 +24,8 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     
     const urlParams = new URLSearchParams(queryString);
     const redirectStatus = urlParams.get('redirect_status');
-    console.log(redirectStatus);
+    const confirmationPaymentIntent = urlParams.get('payment_intent');
+    const confirmationClientSecret = urlParams.get('payment_intent_client_secret');
 
     
     const options = {
@@ -35,6 +36,8 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     const addPaymentIntent = () => {
         dispatch(addPaymentAsync(checkoutToken));
     };
+
+    const getSuccessfulPayment =
 
     useEffect(() => {
         const generateToken = async () => {
@@ -85,7 +88,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
                         </Step>
                     ))}
                 </Stepper>
-                {activeStep === 3 ? <Confirmation payment={payment}/> : checkoutToken && <Form />}
+                {activeStep === 3 ? <Confirmation confirmationClientSecret={confirmationClientSecret} confirmationPaymentIntent={confirmationPaymentIntent} /> : checkoutToken && <Form />}
             </Paper>
         </main>
     </>

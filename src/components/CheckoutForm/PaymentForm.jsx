@@ -14,38 +14,35 @@ const PaymentForm = ({ checkoutToken, lastStep, backStep, shippingData, onCaptur
 
     if (!stripe || !elements) return;
 
-    const { error } = await stripe.confirmPayment({
+    await stripe.confirmPayment({
         elements,
         confirmParams: {
             return_url: 'http://localhost:3001/checkout',
+            payment_method_data: {
+                card: PaymentElement
+            }
         }
-    }).then((result) => {
-        lastStep();
     });
 
-    const paymentMethod = await stripe.paymentMethods.retrieve(
-        payment.paymentIntent
-    );
 
-    console.log(paymentMethod);
-    if (error) {
-      console.log('[error]', error);
-    } else {
-      const orderData = {
-        line_items: checkoutToken.line_items,
-        customer: { firstname: shippingData.firstName, lastname: shippingData.lastName, email: shippingData.email },
-        shipping: { name: 'International', street: shippingData.address1, town_city: shippingData.city, county_state: shippingData.shippingSubdivision, postal_zip_code: shippingData.zip, country: shippingData.shippingCountry },
-        fulfillment: { shipping_method: shippingData.shippingOption },
-        payment: {
-          gateway: 'stripe',
-          stripe: {
-            payment_method_id: paymentMethod.id,
-          },
-        },
-      };
-      console.log(orderData);
-      onCaptureCheckout(checkoutToken.id, orderData);
-    };
+    // if (error) {
+    //   console.log('[error]', error);
+    // } else {
+    //   const orderData = {
+    //     line_items: checkoutToken.line_items,
+    //     customer: { firstname: shippingData.firstName, lastname: shippingData.lastName, email: shippingData.email },
+    //     shipping: { name: 'International', street: shippingData.address1, town_city: shippingData.city, county_state: shippingData.shippingSubdivision, postal_zip_code: shippingData.zip, country: shippingData.shippingCountry },
+    //     fulfillment: { shipping_method: shippingData.shippingOption },
+    //     payment: {
+    //       gateway: 'stripe',
+    //       stripe: {
+    //         payment_method_id: '',
+    //       },
+    //     },
+    //   };
+    //   console.log(orderData);
+    //   onCaptureCheckout(checkoutToken.id, orderData);
+    // };
   };
 
 
