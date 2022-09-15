@@ -6,6 +6,7 @@ const stripe = Stripe('sk_test_51LgN3XGgp3GmJutylJb1ddRJLyrnofCLcRyJEO25EQrpANTl
 
 router.post("/", async (req, res) => {
     const cartTotal = req.body.total.raw * 100;
+    console.log(cartTotal)
     // Create a PaymentIntent with the order amount and currency
     const paymentIntent = await stripe.paymentIntents.create({
       amount: cartTotal,
@@ -16,7 +17,8 @@ router.post("/", async (req, res) => {
     });
     res.send({
       paymentIntent: paymentIntent.client_secret,
-      id: paymentIntent.id
+      id: paymentIntent.id,
+      checkoutTokenLineItems: req.body.line_items,
     });
   });
 
@@ -27,5 +29,11 @@ router.post("/success", async(req, res) =>{
         success: paymentIntent.payment_method,
     });
 });
+
+router.post("/shipping", (req, res) => {
+  res.send({
+    shippingData: req.body
+  })
+})
 
 module.exports = router;

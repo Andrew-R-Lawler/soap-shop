@@ -7,6 +7,8 @@ export const paymentSlice = createSlice({
     initialState: {
         data: {},
         success: {},
+        shipping: {},
+        cart: {}
     },
     reducers: {
         addPayment: (state, action) => {
@@ -14,9 +16,24 @@ export const paymentSlice = createSlice({
         },
         getPayment: (state, action) => {
             state.success = action.payload
+        },
+        addShipping: (state, action) => {
+            state.shipping = action.payload
+        },
+        setReduxCart: (state, action) => {
+            state.cart = action.payload
         }
     }
 });
+
+export const addShippingAsync = (data) => async (dispatch) => {
+    try {
+        const response = await axios.post(API_URL+'/shipping', data);
+        dispatch(addShipping(response.data.shippingData));
+    } catch (err) {
+        throw new Error(err)
+    }
+}
 
 export const addPaymentAsync = (data) => async (dispatch) => {
     try {
@@ -36,9 +53,19 @@ export const getPaymentAsync = (data) => async (dispatch) => {
     }
 };
 
-export const { addPayment, getPayment } = paymentSlice.actions;
+export const setReduxCartAsync = (data) => (dispatch) => {
+    try {
+        dispatch(setReduxCart(data));
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+export const { addPayment, getPayment, addShipping, setReduxCart } = paymentSlice.actions;
 export const showPayment = (state) => state.payment.data;
 export const showSuccessfulPayment = (state) => state.payment.success;
+export const showShipping = (state) => state.shipping.data;
+export const showCart = (state) => state.cart
 export default paymentSlice.reducer;
 
 

@@ -1,14 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Typography, Button, Divider } from '@material-ui/core';
-import { Elements, PaymentElement, ElementsConsumer, useStripe, useElements } from '@stripe/react-stripe-js';
+import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import Review from './Checkout/Review';
+import { useDispatch } from 'react-redux';
+import { setReduxCartAsync } from '../../redux/payment-api-slice';
 
 const stripe = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const PaymentForm = ({ checkoutToken, lastStep, backStep, shippingData, onCaptureCheckout, payment }) => {
+const PaymentForm = ({ cart, checkoutToken, backStep }) => {
     const stripe = useStripe();
     const elements = useElements(PaymentElement);
+    const dispatch = useDispatch();
+
+    const setReduxCart = (cart) => {
+      dispatch(setReduxCartAsync(cart));     
+  };
+
     const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -25,25 +33,13 @@ const PaymentForm = ({ checkoutToken, lastStep, backStep, shippingData, onCaptur
     });
 
 
-    // if (error) {
-    //   console.log('[error]', error);
-    // } else {
-    //   const orderData = {
-    //     line_items: checkoutToken.line_items,
-    //     customer: { firstname: shippingData.firstName, lastname: shippingData.lastName, email: shippingData.email },
-    //     shipping: { name: 'International', street: shippingData.address1, town_city: shippingData.city, county_state: shippingData.shippingSubdivision, postal_zip_code: shippingData.zip, country: shippingData.shippingCountry },
-    //     fulfillment: { shipping_method: shippingData.shippingOption },
-    //     payment: {
-    //       gateway: 'stripe',
-    //       stripe: {
-    //         payment_method_id: '',
-    //       },
-    //     },
-    //   };
-    //   console.log(orderData);
-    //   onCaptureCheckout(checkoutToken.id, orderData);
-    // };
+
+
   };
+
+  useEffect(() => {
+    setReduxCart(cart);
+  }, [])
 
 
   return (

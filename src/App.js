@@ -2,21 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { commerce } from './lib/commerce';
 import { Cart, Products, Navbar, Checkout } from './components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { addPaymentAsync, showPayment } from './redux/payment-api-slice';
-import Confirmation from './components/CheckoutForm/Confirmation';
+
+
+import { showCart } from './redux/payment-api-slice';
 
 const App = () => {
-    const [cart, setCart] = useState({});
     const [products, setProducts] = useState ([]);
     const [order, setOrder] = useState({});
     const [errorMessage, setErrorMessage] = useState('');
+    const [cart, setCart] = useState({})
 
 
 
 
     const fetchProducts = async () => {
         const { data } = await commerce.products.list();
-
         setProducts(data);
     };
 
@@ -53,21 +53,19 @@ const App = () => {
         try {
             const incomingOrder = await commerce.checkout.capture(checkoutToken.id, newOrder);
             setOrder(incomingOrder);
-            refreshCart();
         } catch (error) {
             setErrorMessage(error.data.error.message);
         }
     }
 
     useEffect(() => {
-        fetchCart();
         fetchProducts();
+        fetchCart();
     }, []);
 
   return (
     <Router>
         <div>
-        {console.log(order)}
                 <Navbar cart={cart} refreshCart={refreshCart}/>
             <Routes>
                 <Route path='/' element={<Products products={products} onAddToCart={handleAddToCart}/>} />

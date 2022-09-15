@@ -3,6 +3,8 @@ import { InputLabel, Select, MenuItem, Button, Grid, Typography, TextField } fro
 import { useForm, FormProvider, setValue } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { commerce } from '../../lib/commerce';
+import { useDispatch } from 'react-redux';
+import { addShippingAsync } from '../../redux/payment-api-slice';
 
 const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
     const [shippingCountries, setShippingCountries] = useState([]);
@@ -17,7 +19,18 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
     const [email, setEmail] = useState('');
     const [city, setCity] = useState('');
     const [zip, setZip] = useState('');
-
+    const dispatch = useDispatch();
+    const shippingData = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        address1: address1,
+        city: city,
+        shippingSubdivision: shippingSubdivision,
+        zip: zip,
+        shippingCountry: shippingCountry,
+        shippingOption: shippingOption,
+    }
 
     const methods = useForm();
 
@@ -43,7 +56,9 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
         setShippingOption(options[0].id);
     }
 
-
+    useEffect(() => {
+        dispatch(addShippingAsync(shippingData))
+    }, [zip && shippingOption])
 
     useEffect(() => {
         fetchShippingCountries(checkoutToken.id);
@@ -85,7 +100,7 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
     <>
         <Typography variant="h6" gutterBottom>Shipping Address</Typography>
         <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(() => next({ firstName, lastName, address1, email, city, zip, shippingCountry, shippingSubdivision, shippingOption }))}>
+            <form onSubmit={methods.handleSubmit(() => next())}>
                 <Grid container spacing = {3}>
                     <TextField required name="firstName" label="First Name" onChange={handleFirstNameChange} value={firstName} />
                     <TextField required name="lastName" label="Last Name" onChange={handleLastNameChange} value={lastName}/>

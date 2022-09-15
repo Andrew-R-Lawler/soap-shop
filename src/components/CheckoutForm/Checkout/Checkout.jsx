@@ -37,8 +37,6 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
         dispatch(addPaymentAsync(checkoutToken));
     };
 
-    const getSuccessfulPayment =
-
     useEffect(() => {
         const generateToken = async () => {
             try {
@@ -49,7 +47,8 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
             }
         }
         generateToken();
-    }, [cart])
+    }, [cart]);
+
     useEffect(() => {
         if (redirectStatus === 'succeeded') {
             lastStep();
@@ -61,8 +60,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
     const lastStep = () => setActiveStep((3));
 
-    const next = (data) => {
-        setShippingData(data);
+    const next = () => {
         nextStep();
     }
     
@@ -73,7 +71,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
 
     const Form = () => (activeStep === 0)
         ? <AddressForm cart={cart} checkoutToken={checkoutToken} next={next}/>
-        : <Elements stripe={stripePromise} options={options}><PaymentForm checkoutToken={checkoutToken} payment={payment} onCaptureCheckout={onCaptureCheckout} backStep={backStep} lastStep={lastStep}/></Elements>;
+        : <Elements stripe={stripePromise} options={options}><PaymentForm checkoutToken={checkoutToken} payment={payment} onCaptureCheckout={onCaptureCheckout} backStep={backStep} lastStep={lastStep} cart={cart}/></Elements>;
 
   return (
     <>
@@ -88,7 +86,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
                         </Step>
                     ))}
                 </Stepper>
-                {activeStep === 3 ? <Confirmation confirmationClientSecret={confirmationClientSecret} confirmationPaymentIntent={confirmationPaymentIntent} /> : checkoutToken && <Form />}
+                {activeStep === 3 ? <Confirmation confirmationClientSecret={confirmationClientSecret} confirmationPaymentIntent={confirmationPaymentIntent} onCaptureCheckout={onCaptureCheckout}/> : checkoutToken && <Form />}
             </Paper>
         </main>
     </>

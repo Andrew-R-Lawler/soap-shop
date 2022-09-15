@@ -1,12 +1,23 @@
 import { configureStore, getDefaultMiddleware } from "@reduxjs/toolkit";
 import paymentSlice from "./redux/payment-api-slice";
 import logger from 'redux-logger';
+import storage from 'redux-persist/lib/storage';
+import { persistReducer, persistStore } from 'redux-persist';
+import thunk from 'redux-thunk';
 
-export default configureStore({
+const persistConfig = {
+  key: 'root',
+  storage
+}
+
+const persistedReducer = persistReducer(persistConfig, paymentSlice)
+export const store = configureStore({
   reducer: {
-    payment: paymentSlice,
+    payment: persistedReducer
   },
   middleware: (getDefaultMiddleware) => {
     return getDefaultMiddleware().concat(logger);
   }
 });
+
+export const persistor = persistStore(store)
