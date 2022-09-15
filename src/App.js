@@ -73,7 +73,6 @@ const App = () => {
                 <Route path='/' element={<Products products={products} onAddToCart={handleAddToCart}/>} />
                 <Route path='/cart' element={<Cart cart={cart} handleUpdateCartQty={handleUpdateCartQty} handleRemoveFromCart={handleRemoveFromCart} handleEmptyCart={handleEmptyCart} />} />
                 <Route path='/checkout' element={<Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />}/>
-                <Route path='/confirmation' element={<Confirmation />} />
             </Routes>
         </div>
     </Router>

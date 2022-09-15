@@ -1,9 +1,13 @@
 import React from 'react'
+import { Typography } from '@material-ui/core';
 
-const Confirmation = () => {
+const Confirmation = (payment) => {
   return (
-    <div>Confirmation</div>
+    <div>
+        {console.log(payment)}
+        <Typography>Confirmation</Typography>
+    </div>
   )
 }
 
-export default Confirmation
+export default Confirmation;

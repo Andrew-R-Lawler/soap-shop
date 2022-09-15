@@ -6,11 +6,9 @@ import Review from './Checkout/Review';
 
 const stripe = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptureCheckout, payment }) => {
+const PaymentForm = ({ checkoutToken, lastStep, backStep, shippingData, onCaptureCheckout, payment }) => {
     const stripe = useStripe();
     const elements = useElements(PaymentElement);
-    const [paymentIntent, setPaymentIntent] = useState('');
-    const [paymentId, setPaymentId] = useState('');
     const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -19,9 +17,11 @@ const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptur
     const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-            redirect: 'if_required',
+            return_url: 'http://localhost:3001/checkout',
         }
-    })
+    }).then((result) => {
+        lastStep();
+    });
 
     const paymentMethod = await stripe.paymentMethods.retrieve(
         payment.paymentIntent
@@ -45,7 +45,6 @@ const PaymentForm = ({ checkoutToken, nextStep, backStep, shippingData, onCaptur
       };
       console.log(orderData);
       onCaptureCheckout(checkoutToken.id, orderData);
-      nextStep();
     };
   };
 

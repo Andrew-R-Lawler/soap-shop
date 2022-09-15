@@ -8,6 +8,7 @@ import PaymentForm from '../PaymentForm';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPaymentAsync, showPayment } from '../../../redux/payment-api-slice';
 import { Elements } from '@stripe/react-stripe-js';
+import Confirmation from '../Confirmation';
 const steps = ['Shipping Address', 'Payment Details', 'Confirmation']
 
 
@@ -18,8 +19,12 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     const classes = useStyles();
     const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
     const payment = useSelector(showPayment);
+    const queryString = window.location.search;
     const dispatch = useDispatch();
- 
+    
+    const urlParams = new URLSearchParams(queryString);
+    const redirectStatus = urlParams.get('redirect_status');
+    console.log(redirectStatus);
 
     
     const options = {
@@ -42,21 +47,21 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
         }
         generateToken();
     }, [cart])
+    useEffect(() => {
+        if (redirectStatus === 'succeeded') {
+            lastStep();
+        }
+    }, [])
+    
 
     const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
     const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    const lastStep = () => setActiveStep((3));
 
     const next = (data) => {
         setShippingData(data);
         nextStep();
     }
-
-    const Confirmation = () => (
-        <div>
-            Confirmation
-        </div>
-    )
-
     
     useEffect(() => {
         addPaymentIntent();
@@ -65,7 +70,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
 
     const Form = () => (activeStep === 0)
         ? <AddressForm cart={cart} checkoutToken={checkoutToken} next={next}/>
-        : <Elements stripe={stripePromise} options={options}><PaymentForm checkoutToken={checkoutToken} payment={payment} onCaptureCheckout={onCaptureCheckout} backStep={backStep} nextStep={nextStep}/></Elements>;
+        : <Elements stripe={stripePromise} options={options}><PaymentForm checkoutToken={checkoutToken} payment={payment} onCaptureCheckout={onCaptureCheckout} backStep={backStep} lastStep={lastStep}/></Elements>;
 
   return (
     <>
@@ -80,7 +85,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
                         </Step>
                     ))}
                 </Stepper>
-                {activeStep === steps.legnth ? <Confirmation /> : checkoutToken && <Form />}
+                {activeStep === 3 ? <Confirmation payment={payment}/> : checkoutToken && <Form />}
             </Paper>
         </main>
     </>
