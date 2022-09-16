@@ -55,7 +55,7 @@ const App = () => {
             setErrorMessage(error.data.error.message);
         }
     }
-    // adding line of code for git merge attempt
+    
     useEffect(() => {
         fetchProducts();
         fetchCart();
