@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { addShippingAsync } from '../../redux/payment-api-slice';
 
 
-const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
+const AddressForm = ({ checkoutToken, cart, next }) => {
     const [shippingCountries, setShippingCountries] = useState([]);
     const [shippingCountry, setShippingCountry] = useState('');
     const [shippingSubdivisions, setShippingSubdivisions] = useState([]);
@@ -58,12 +58,17 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
 
     useEffect(() => {
         dispatch(addShippingAsync(shippingData))
-    // eslint-disable-next-line
-    }, [zip, shippingOption])
+        // eslint-disable-next-line
+    }, [shippingSubdivision])
+
+    useEffect(() => {
+        dispatch(addShippingAsync(shippingData))
+        // eslint-disable-next-line
+    }, [zip])
 
     useEffect(() => {
         fetchShippingCountries(checkoutToken.id);
-    // eslint-disable-next-line
+        // eslint-disable-next-line
     }, [cart])
 
     useEffect(() => {
@@ -99,18 +104,23 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
         setZip(event.target.value);
         };
 
+    const handleShippingSubdivisionChange = event => {
+        setShippingSubdivision(event.target.value)
+        console.log(shippingSubdivision)
+        };
+
   return (
     <>
         <Typography variant="h6" gutterBottom>Shipping Address</Typography>
         <FormProvider {...methods}>
-            <form onSubmit={methods.handleSubmit(() => next())}>
+            <form onSubmit={methods.handleSubmit(() => nextStep())}>
                 <Grid container spacing = {3}>
-                    <TextField required name="firstName" label="First Name" onChange={handleFirstNameChange} value={firstName} />
-                    <TextField required name="lastName" label="Last Name" onChange={handleLastNameChange} value={lastName}/>
-                    <TextField required name="address1" label="Address" onChange={handleAddress1Change} value={address1} />
-                    <TextField required name="email" label="E-Mail" onChange={handleEmailChange} value={email} />
-                    <TextField required name="city" label="City" onChange={handleCityChange} value={city} />
-                    <TextField required name="zip" label="ZIP / Postal Code" onChange={handleZipChange} value={zip} />
+                    <Grid item xs={12} sm={6}><TextField required name="firstName" label="First Name" onChange={handleFirstNameChange} value={firstName} /></Grid>
+                    <Grid item xs={12} sm={6}><TextField required name="lastName" label="Last Name" onChange={handleLastNameChange} value={lastName}/></Grid>
+                    <Grid item xs={12} sm={6}><TextField required name="address1" label="Address" onChange={handleAddress1Change} value={address1} /></Grid>
+                    <Grid item xs={12} sm={6}><TextField required name="email" label="E-Mail" onChange={handleEmailChange} value={email} /></Grid>
+                    <Grid item xs={12} sm={6}><TextField required name="city" label="City" onChange={handleCityChange} value={city} /></Grid>
+                    <Grid item xs={12} sm={6}><TextField required name="zip" label="ZIP / Postal Code" onChange={handleZipChange} value={zip} /></Grid>
                     <Grid item xs={12} sm={6}>
                         <InputLabel>Shipping Country</InputLabel>
                         <Select value={shippingCountry} fullWidth onChange={(e) => setShippingCountry(e.target.value)}>
@@ -121,7 +131,7 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <InputLabel>Shipping Subdivision</InputLabel>
-                        <Select value={shippingSubdivision} fullWidth onChange={(e) => setShippingSubdivision(e.target.value)}>
+                        <Select value={shippingSubdivision} fullWidth onChange={handleShippingSubdivisionChange}>
                             {subdivisions.map((subdivision) => (
                                 <MenuItem key={subdivision.id} value={subdivision.id}>{subdivision.label}</MenuItem>
                             ))}
@@ -139,7 +149,7 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
                 <br />
                 <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <Button component={Link} to='/cart' variant="outlined">Back to Cart</Button>
-                    <Button type="submit" variant="contained">Next</Button>
+                    <Button type="submit" variant="contained" color={'primary'}>Next</Button>
                 </div>
             </form>
         </FormProvider>

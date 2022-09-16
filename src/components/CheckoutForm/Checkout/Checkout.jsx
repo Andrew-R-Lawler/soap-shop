@@ -30,14 +30,10 @@ const Checkout = ({ cart, onCaptureCheckout, refreshCart }) => {
     const nextStep = () => setActiveStep((prevActiveStep) => prevActiveStep + 1);
     const backStep = () => setActiveStep((prevActiveStep) => prevActiveStep - 1);
     const lastStep = () => setActiveStep((3));
-
-    const next = () => {
-        nextStep();
-    }
     
 
     const Form = () => (activeStep === 0)
-        ? <AddressForm cart={cart} checkoutToken={checkoutToken} next={next}/>
+        ? <AddressForm cart={cart} checkoutToken={checkoutToken} nextStep={nextStep}/>
         : <Elements stripe={stripePromise}><PaymentForm lastStep={lastStep} checkoutToken={checkoutToken} refreshCart={refreshCart} onCaptureCheckout={onCaptureCheckout} backStep={backStep} cart={cart} /></Elements>;
 
   return (

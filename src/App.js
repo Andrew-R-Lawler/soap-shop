@@ -64,7 +64,7 @@ const App = () => {
   return (
     <Router>
         <div>
-                <Navbar cart={cart} refreshCart={refreshCart}/>
+                <Navbar cart={cart} />
             <Routes>
                 <Route path='/' element={<Products products={products} onAddToCart={handleAddToCart}/>} />
                 <Route path='/cart' element={<Cart cart={cart} handleUpdateCartQty={handleUpdateCartQty} handleRemoveFromCart={handleRemoveFromCart} handleEmptyCart={handleEmptyCart} />} />

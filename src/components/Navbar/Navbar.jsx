@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 import logo from '../../assets/commerce.png';
 import useStyles from './styles';
 
-const Navbar = ({ cart, refreshCart }) => {
+const Navbar = ({ cart }) => {
     const classes = useStyles();
     const cartLoading = !cart;
     const location = useLocation();
@@ -20,11 +20,6 @@ const Navbar = ({ cart, refreshCart }) => {
                         Commerce.js
                     </Typography>
                     <div className={classes.grow} />
-                        <IconButton onClick={refreshCart} >
-                            <Badge>
-                                <ShoppingCart />
-                            </Badge>
-                        </IconButton>
                         { location.pathname === '/' && (
                             <div className={classes.button}>
                                 <IconButton component={Link} to='/cart' aria-label="Show cart items" color="inherit">
