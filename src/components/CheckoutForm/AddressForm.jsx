@@ -7,7 +7,7 @@ import { useDispatch } from 'react-redux';
 import { addShippingAsync } from '../../redux/payment-api-slice';
 
 
-const AddressForm = ({ checkoutToken, cart, next }) => {
+const AddressForm = ({ checkoutToken, cart, nextStep }) => {
     const [shippingCountries, setShippingCountries] = useState([]);
     const [shippingCountry, setShippingCountry] = useState('');
     const [shippingSubdivisions, setShippingSubdivisions] = useState([]);
