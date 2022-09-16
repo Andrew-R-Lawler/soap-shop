@@ -18,10 +18,8 @@ const Confirmation = ({ confirmationPaymentIntent, confirmationClientSecret, onC
         shipping: { name: 'International', street: shippingData.address1, town_city: shippingData.city, county_state: shippingData.shippingSubdivision, postal_zip_code: shippingData.zip, country: shippingData.shippingCountry },
         fulfillment: { shipping_method: shippingData.shippingOption },
         payment: {
-          gateway: 'stripe',
-          card: {
-            payment_method_id: payment,
-          }
+          gateway: 'Manual',
+          manual: { id: 'gway_jwOJ9GD90qKVl4' }
         },
       };
       console.log();

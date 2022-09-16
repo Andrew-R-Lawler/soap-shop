@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Grid } from '@material-ui/core';
-import { commerce } from '../../lib/commerce';
 import Product from './Product/Product';
 import useStyles from './styles';
 

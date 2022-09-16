@@ -7,16 +7,14 @@ import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../PaymentForm';
 import { useSelector, useDispatch } from 'react-redux';
 import { addPaymentAsync, showPayment, showShipping } from '../../../redux/payment-api-slice';
-import { Elements } from '@stripe/react-stripe-js';
+import { Elements, useStripe } from '@stripe/react-stripe-js';
 import Confirmation from '../Confirmation';
 const steps = ['Shipping Address', 'Payment Details', 'Confirmation']
-
-
+const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY)
 const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     const [activeStep, setActiveStep] = useState(0);
     const [checkoutToken, setCheckoutToken] = useState(null);
     const classes = useStyles();
-    const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
     const payment = useSelector(showPayment);
     const queryString = window.location.search;
     const dispatch = useDispatch();
@@ -71,7 +69,7 @@ const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
 
     const Form = () => (activeStep === 0)
         ? <AddressForm cart={cart} checkoutToken={checkoutToken} next={next}/>
-        : <Elements stripe={stripePromise} options={options}><PaymentForm checkoutToken={checkoutToken} payment={payment} onCaptureCheckout={onCaptureCheckout} backStep={backStep} lastStep={lastStep} cart={cart}/></Elements>;
+        : <Elements stripe={stripePromise} options={options}><PaymentForm checkoutToken={checkoutToken} payment={payment} onCaptureCheckout={onCaptureCheckout} backStep={backStep} lastStep={lastStep} cart={cart} /></Elements>;
 
   return (
     <>

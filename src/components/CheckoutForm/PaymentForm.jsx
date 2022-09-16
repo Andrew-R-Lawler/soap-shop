@@ -1,17 +1,15 @@
 import React, { useEffect } from 'react';
 import { Typography, Button, Divider } from '@material-ui/core';
-import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
+import { Elements, CardElement, useStripe, useElements, ElementsConsumer } from '@stripe/react-stripe-js';
 import Review from './Checkout/Review';
 import { useDispatch } from 'react-redux';
-import { setReduxCartAsync, showShipping } from '../../redux/payment-api-slice';
-import { useSelector } from 'react-redux';
+import { setReduxCartAsync } from '../../redux/payment-api-slice';
 
-const stripe = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const PaymentForm = ({shipping, cart, checkoutToken, backStep }) => {
+
+const PaymentForm = ({ cart, checkoutToken, backStep }) => {
     const stripe = useStripe();
-    const elements = useElements(PaymentElement);
+    const elements = useElements();
     const dispatch = useDispatch();
     const setReduxCart = (cart) => {
       dispatch(setReduxCartAsync(cart));     
@@ -19,21 +17,11 @@ const PaymentForm = ({shipping, cart, checkoutToken, backStep }) => {
     const handleSubmit = async (event) => {
     event.preventDefault();
     if (!stripe || !elements) return;
+    const cardElement = elements.getElement(CardElement);
 
-    await stripe.confirmPayment({
-        elements,
-        confirmParams: {
-            return_url: 'http://localhost:3001/checkout',
-            payment_method_data: {
-                card: PaymentElement
-            }
-        }
-    });
-
-
-
-
-  };
+    const result= await stripe.createToken(cardElement);
+    console.log(result);
+    };
 
   useEffect(() => {
     setReduxCart(cart);
@@ -45,13 +33,14 @@ const PaymentForm = ({shipping, cart, checkoutToken, backStep }) => {
       <Review checkoutToken={checkoutToken} />
       <Divider />
       <Typography variant="h6" gutterBottom style={{ margin: '20px 0' }}>Payment method</Typography>
-            <form onSubmit = {handleSubmit}>
-                <PaymentElement />
-                <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px 0'}}>
-                <Button variant="outlined" onClick={backStep}>Back</Button>
-                <Button type="submit" variant="contained" color="primary">Pay {checkoutToken.subtotal.formatted_with_symbol}</Button>
-                </div>
-            </form>
+                    <form onSubmit = {(e) => handleSubmit(e, elements, stripe)}>
+                      <CardElement />
+                      <br/>
+                      <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px 0'}}>
+                        <Button variant="outlined" onClick={backStep}>Back</Button>
+                        <Button type="submit" variant="contained" color="primary" disabled={!stripe} >Pay {checkoutToken.subtotal.formatted_with_symbol}</Button>
+                      </div>
+                    </form>
     </>
   );
 };
