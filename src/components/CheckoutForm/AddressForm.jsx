@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { InputLabel, Select, MenuItem, Button, Grid, Typography, TextField } from '@material-ui/core';
-import { useForm, FormProvider, setValue } from 'react-hook-form';
+import { useForm, FormProvider } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { commerce } from '../../lib/commerce';
 import { useDispatch } from 'react-redux';
-import { addShippingAsync, showCart, showPayment, showShipping } from '../../redux/payment-api-slice';
-import { useSelector } from 'react-redux';
+import { addShippingAsync } from '../../redux/payment-api-slice';
+
 
 const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
     const [shippingCountries, setShippingCountries] = useState([]);
@@ -58,10 +58,12 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
 
     useEffect(() => {
         dispatch(addShippingAsync(shippingData))
-    }, [zip && shippingOption])
+    // eslint-disable-next-line
+    }, [zip, shippingOption])
 
     useEffect(() => {
         fetchShippingCountries(checkoutToken.id);
+    // eslint-disable-next-line
     }, [cart])
 
     useEffect(() => {
@@ -70,6 +72,7 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
 
     useEffect(() => {
         if(shippingSubdivision) fetchShippingOptions(checkoutToken.id, shippingCountry, shippingSubdivision);
+    // eslint-disable-next-line
     }, [shippingSubdivision])
 
     const handleFirstNameChange = event => {

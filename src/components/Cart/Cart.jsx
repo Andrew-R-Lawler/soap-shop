@@ -1,9 +1,8 @@
 import React from 'react'
-import { Container, Typography, Button, Grid, Card, CardContent, CardActions } from '@material-ui/core';
+import { Container, Typography, Button, Grid } from '@material-ui/core';
 import useStyles from './styles';
 import CartItem from './CartItem/CartItem';
 import { Link } from 'react-router-dom';
-import { commerce } from '../../lib/commerce';
 
 const Cart = ({ cart, handleUpdateCartQty, handleRemoveFromCart, handleEmptyCart }) => {
     const classes = useStyles();

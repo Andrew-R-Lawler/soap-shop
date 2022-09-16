@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { commerce } from './lib/commerce';
 import { Cart, Products, Navbar, Checkout } from './components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { showShipping } from './redux/payment-api-slice';
-import { useSelector } from 'react-redux';
+
 
 const App = () => {
     const [products, setProducts] = useState ([]);
@@ -24,22 +23,22 @@ const App = () => {
     };
 
     const handleAddToCart = async (productId, quantity) => {
-        const item = await commerce.cart.add(productId, quantity);
+        await commerce.cart.add(productId, quantity);
         fetchCart();
     };
 
     const handleUpdateCartQty = async (productId, quantity) => {
-        const { cart } = await commerce.cart.update(productId, {quantity});
+        await commerce.cart.update(productId, {quantity});
         fetchCart();
     }
 
     const handleRemoveFromCart = async (productId) => {
-        const { cart } = await commerce.cart.remove(productId);
+        await commerce.cart.remove(productId);
         fetchCart();
     }
 
     const handleEmptyCart = async () => {
-        const { cart } = await commerce.cart.empty();
+        await commerce.cart.empty();
         fetchCart();
     }
 
@@ -69,7 +68,7 @@ const App = () => {
             <Routes>
                 <Route path='/' element={<Products products={products} onAddToCart={handleAddToCart}/>} />
                 <Route path='/cart' element={<Cart cart={cart} handleUpdateCartQty={handleUpdateCartQty} handleRemoveFromCart={handleRemoveFromCart} handleEmptyCart={handleEmptyCart} />} />
-                <Route path='/checkout' element={<Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} />}/>
+                <Route path='/checkout' element={<Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} refreshCart={refreshCart} />}/>
             </Routes>
         </div>
     </Router>
