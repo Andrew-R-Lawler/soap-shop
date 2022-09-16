@@ -6,7 +6,7 @@ import { commerce } from '../../../lib/commerce';
 import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../PaymentForm';
 import { useSelector, useDispatch } from 'react-redux';
-import { addPaymentAsync, showPayment } from '../../../redux/payment-api-slice';
+import { addPaymentAsync, showPayment, showShipping } from '../../../redux/payment-api-slice';
 import { Elements } from '@stripe/react-stripe-js';
 import Confirmation from '../Confirmation';
 const steps = ['Shipping Address', 'Payment Details', 'Confirmation']
@@ -15,19 +15,19 @@ const steps = ['Shipping Address', 'Payment Details', 'Confirmation']
 const Checkout = ({ cart, order, onCaptureCheckout, error }) => {
     const [activeStep, setActiveStep] = useState(0);
     const [checkoutToken, setCheckoutToken] = useState(null);
-    const [shippingData, setShippingData] = useState({});
     const classes = useStyles();
     const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
     const payment = useSelector(showPayment);
     const queryString = window.location.search;
     const dispatch = useDispatch();
+
+
     
     const urlParams = new URLSearchParams(queryString);
     const redirectStatus = urlParams.get('redirect_status');
     const confirmationPaymentIntent = urlParams.get('payment_intent');
     const confirmationClientSecret = urlParams.get('payment_intent_client_secret');
 
-    
     const options = {
         // passing the client secret obtained in step 2
         clientSecret: payment.paymentIntent,

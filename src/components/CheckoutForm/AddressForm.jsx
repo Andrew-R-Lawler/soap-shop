@@ -4,7 +4,8 @@ import { useForm, FormProvider, setValue } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { commerce } from '../../lib/commerce';
 import { useDispatch } from 'react-redux';
-import { addShippingAsync } from '../../redux/payment-api-slice';
+import { addShippingAsync, showCart, showPayment, showShipping } from '../../redux/payment-api-slice';
+import { useSelector } from 'react-redux';
 
 const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
     const [shippingCountries, setShippingCountries] = useState([]);
@@ -31,7 +32,6 @@ const AddressForm = ({ checkoutToken, cart, next, nextStep }) => {
         shippingCountry: shippingCountry,
         shippingOption: shippingOption,
     }
-
     const methods = useForm();
 
     const countries = Object.entries(shippingCountries).map(([code, name]) => ({ id: code, label: name }));

@@ -11,8 +11,7 @@ const Confirmation = ({ confirmationPaymentIntent, confirmationClientSecret, onC
     const confirmationObject = {
         id: confirmationPaymentIntent
     };
-
-    console.log(shippingData);
+ 
     const orderData = {
         line_items: checkoutToken.line_items,
         customer: { firstname: shippingData.firstName, lastname: shippingData.lastName, email: shippingData.email },
@@ -20,12 +19,12 @@ const Confirmation = ({ confirmationPaymentIntent, confirmationClientSecret, onC
         fulfillment: { shipping_method: shippingData.shippingOption },
         payment: {
           gateway: 'stripe',
-          stripe: {
-            payment_method_id: payment.sucess,
-          },
+          card: {
+            payment_method_id: payment,
+          }
         },
       };
-      console.log(orderData);
+      console.log();
 
 
     const fetchPaymentMethod = (secret) => {
@@ -34,7 +33,7 @@ const Confirmation = ({ confirmationPaymentIntent, confirmationClientSecret, onC
 
     useEffect(() => {
         onCaptureCheckout(checkoutToken.id, orderData);
-    }, [orderData]);
+    }, []);
 
     useEffect(() => {
         fetchPaymentMethod(confirmationObject);
@@ -43,7 +42,6 @@ const Confirmation = ({ confirmationPaymentIntent, confirmationClientSecret, onC
 
   return (
     <div>
-    {console.log(payment)}
         <Typography>Confirmation</Typography>
     </div>
   )

@@ -34,6 +34,7 @@ router.post("/shipping", (req, res) => {
   res.send({
     shippingData: req.body
   })
+  console.log(req.body)
 })
 
 module.exports = router;

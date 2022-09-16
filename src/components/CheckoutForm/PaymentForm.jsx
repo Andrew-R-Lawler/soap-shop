@@ -4,22 +4,20 @@ import { Elements, PaymentElement, useStripe, useElements } from '@stripe/react-
 import { loadStripe } from '@stripe/stripe-js';
 import Review from './Checkout/Review';
 import { useDispatch } from 'react-redux';
-import { setReduxCartAsync } from '../../redux/payment-api-slice';
+import { setReduxCartAsync, showShipping } from '../../redux/payment-api-slice';
+import { useSelector } from 'react-redux';
 
 const stripe = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY);
 
-const PaymentForm = ({ cart, checkoutToken, backStep }) => {
+const PaymentForm = ({shipping, cart, checkoutToken, backStep }) => {
     const stripe = useStripe();
     const elements = useElements(PaymentElement);
     const dispatch = useDispatch();
-
     const setReduxCart = (cart) => {
       dispatch(setReduxCartAsync(cart));     
   };
-
     const handleSubmit = async (event) => {
     event.preventDefault();
-
     if (!stripe || !elements) return;
 
     await stripe.confirmPayment({

@@ -8,7 +8,7 @@ export const paymentSlice = createSlice({
         data: {},
         success: {},
         shipping: {},
-        cart: {}
+        cart: {},
     },
     reducers: {
         addPayment: (state, action) => {
@@ -61,11 +61,12 @@ export const setReduxCartAsync = (data) => (dispatch) => {
     }
 }
 
+
 export const { addPayment, getPayment, addShipping, setReduxCart } = paymentSlice.actions;
 export const showPayment = (state) => state.payment.data;
 export const showSuccessfulPayment = (state) => state.payment.success;
-export const showShipping = (state) => state.shipping.data;
-export const showCart = (state) => state.cart
+export const showShipping = (state) => state.payment.shipping;
+export const showCart = (state) => state.payment.cart;
 export default paymentSlice.reducer;
 
 

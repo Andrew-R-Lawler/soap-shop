@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { commerce } from './lib/commerce';
 import { Cart, Products, Navbar, Checkout } from './components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-
-
-import { showCart } from './redux/payment-api-slice';
+import { showShipping } from './redux/payment-api-slice';
+import { useSelector } from 'react-redux';
 
 const App = () => {
     const [products, setProducts] = useState ([]);
