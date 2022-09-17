@@ -38,6 +38,7 @@ export const addBillingAsync = (data) => async (dispatch) => {
 
 export const { addShipping, addBilling } = paymentSlice.actions;
 export const showShipping = (state) => state.payment.shipping;
+export const showBilling = (state) => state.payment.billing;
 export default paymentSlice.reducer;
 
 

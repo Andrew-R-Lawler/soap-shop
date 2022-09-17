@@ -77,19 +77,10 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         setShippingOption(options[0].id);
     }
 
-    const conditionalBilling = (checked) => {
-        if (checked === true) {
-            dispatch(addBillingAsync(shippingData))
-        } else {
-            console.log('billing data is')
-        }
-
-    }
-
     useEffect(() => {
         dispatch(addShippingAsync(shippingData))
         // eslint-disable-next-line
-    }, [shippingSubdivision])
+    }, [shippingData])
 
     useEffect(() => {
         dispatch(addBillingAsync(billingData))
