@@ -7,7 +7,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import PaymentForm from '../PaymentForm';
 import { Elements } from '@stripe/react-stripe-js';
 import Confirmation from '../Confirmation';
-const steps = ['Shipping Address', 'Payment Details', 'Confirmation']
+const steps = ['Shipping & Billing', 'Payment Details', 'Confirmation']
 const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_KEY)
 const Checkout = ({ cart, onCaptureCheckout, refreshCart }) => {
     const [activeStep, setActiveStep] = useState(0);

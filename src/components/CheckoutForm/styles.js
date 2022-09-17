@@ -15,5 +15,8 @@ export default makeStyles((theme) => ({
     },
     shippingSubtitle: {
         margin: '10px 0px 0px 20px'
+    },
+    switch: {
+        margin: '0px 0px 10px 0px'
     }
 }))

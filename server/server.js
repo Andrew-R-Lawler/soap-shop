@@ -5,18 +5,12 @@ const cors = require('cors');
 
 require('dotenv').config();
 
-// Define API Routes
-const paymentRouter = require('./routes/payment.router');
-
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Cors middleware
 app.use(cors());
-
-// Routes
-app.use('/api/payment', paymentRouter);
 
 // Serve static files
 app.use(express.static('build'));
