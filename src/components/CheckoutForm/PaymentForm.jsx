@@ -5,25 +5,39 @@ import Review from './Checkout/Review';
 import { useSelector } from 'react-redux';
 import { showShipping, showBilling } from '../../redux/payment-api-slice';
 
-
-
-
 const PaymentForm = ({ checkoutToken, backStep, lastStep, onCaptureCheckout, refreshCart }) => {
+
+    // initialize order data state
     const [orderData, setOrderData] = useState({});
+
+    // creates stripe object using useStripe hook
     const stripe = useStripe();
+
+    // creates stripe elements object using useElements hook
     const elements = useElements();
+
+    // creates shipping object from react-redux state
     const shipping = useSelector(showShipping);
+
+    // creates billing object from react-redux state
     const billing = useSelector(showBilling);
 
+    // handles checkout on submit
     const handleSubmit = async (event) => {
 
+    // keeps page from reloading
     event.preventDefault();
-    console.log(shipping);
-    if (!stripe || !elements) return;
-
-    const cardElement = elements.getElement(CardElement);
-    const result= await stripe.createToken(cardElement);
     
+    // if stripe and elements aren't active function will return here
+    if (!stripe || !elements) return;
+    
+    // creates object from CardElement inputs
+    const cardElement = elements.getElement(CardElement);
+
+    // creates card token for completeing payment
+    const result = await stripe.createToken(cardElement);
+      
+      // order data object for when shipping and billing are the same
       const shippingOrderData = {
         line_items: checkoutToken.line_items,
         customer: { firstname: shipping.firstName, lastname: shipping.lastName, email: shipping.email },
@@ -47,6 +61,7 @@ const PaymentForm = ({ checkoutToken, backStep, lastStep, onCaptureCheckout, ref
         },
       };
 
+      // order data object for when shipping and billing are different
       const billingOrderData = {
         line_items: checkoutToken.line_items,
         customer: { firstname: shipping.firstName, lastname: shipping.lastName, email: shipping.email },
@@ -70,14 +85,17 @@ const PaymentForm = ({ checkoutToken, backStep, lastStep, onCaptureCheckout, ref
         },
       };
       
-      
-    console.log(shippingOrderData);
+    // checkout capture conditional determines whether billing data exists, fires function with correct order data 
     if (billing.firstName === '') {
       onCaptureCheckout(checkoutToken, shippingOrderData);
     } else {
       onCaptureCheckout(checkoutToken, billingOrderData);
     }
+
+    // clears current cart
     refreshCart();
+
+    // sends customer to confirmation page
     lastStep();
     };
 

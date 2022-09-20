@@ -7,8 +7,14 @@ import logo from '../../assets/commerce.png';
 import useStyles from './styles';
 
 const Navbar = ({ cart }) => {
+
+    // imports classes object form ./styles
     const classes = useStyles();
+
+    // checks for existence of cart
     const cartLoading = !cart;
+
+    //checks for pathname
     const location = useLocation();
 
     return (
@@ -20,6 +26,7 @@ const Navbar = ({ cart }) => {
                         Web Shop
                     </Typography>
                     <div className={classes.grow} />
+                        {/* if pathname is at root Shopping cart will render into Navbar */}
                         { location.pathname === '/' && (
                             <div className={classes.button}>
                                 <IconButton component={Link} to='/cart' aria-label="Show cart items" color="inherit">

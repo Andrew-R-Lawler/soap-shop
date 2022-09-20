@@ -1,7 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-const axios = require("axios");
-const API_URL = "http://localhost:5000/api/payment";
 
+// creates redux payment slice
 export const paymentSlice = createSlice({
     name: "payment",
     initialState: {
@@ -18,6 +17,7 @@ export const paymentSlice = createSlice({
     }
 });
 
+// dispatches shipping data to redux store
 export const addShippingAsync = (data) => async (dispatch) => {
     try {
         dispatch(addShipping(data));
@@ -26,6 +26,7 @@ export const addShippingAsync = (data) => async (dispatch) => {
     }
 };
 
+// dispatches billing data to redux store
 export const addBillingAsync = (data) => async (dispatch) => {
     try {
         dispatch(addBilling(data))
@@ -34,11 +35,13 @@ export const addBillingAsync = (data) => async (dispatch) => {
     }
 }
 
-
-
+// exports dispatch actions
 export const { addShipping, addBilling } = paymentSlice.actions;
+
+// exports hooks for accessing store data
 export const showShipping = (state) => state.payment.shipping;
 export const showBilling = (state) => state.payment.billing;
+
 export default paymentSlice.reducer;
 
 

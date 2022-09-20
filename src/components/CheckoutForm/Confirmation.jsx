@@ -6,8 +6,13 @@ import useStyles from './styles';
 
 
 const Confirmation = ( ) => {
+  // initializes classes object from ./styles
   const classes = useStyles();
+
+  // creates shipping data object from react-redux state
   const shippingData = useSelector(showShipping);
+
+  // creates billing data object from react-redux state
   const billingData = useSelector(showBilling);
 
   return (
