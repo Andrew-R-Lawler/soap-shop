@@ -11,6 +11,9 @@ export default makeStyles((theme) => ({
       marginLeft: drawerWidth,
     },
   },
+  drawerTitle: {
+    marginBottom: '10px',
+  },
   title: {
     flexGrow: 1,
     alignItems: 'center',
@@ -19,6 +22,10 @@ export default makeStyles((theme) => ({
   },
   image: {
     marginRight: '10px',
+  },
+  image2: {
+    marginRight: '10px',
+    marginLeft: '20px',
   },
   menuButton: {
     marginRight: theme.spacing(2),
