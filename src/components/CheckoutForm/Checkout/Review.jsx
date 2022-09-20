@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, List, ListItem, ListItemText } from '@material-ui/core';
 
-
+// Component is a review of products in order, implemented in PaymentForm
 const Review = ({ checkoutToken }) => {
   return (
     <>

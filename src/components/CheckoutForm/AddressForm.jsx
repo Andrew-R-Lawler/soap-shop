@@ -6,36 +6,84 @@ import { commerce } from '../../lib/commerce';
 import { useDispatch } from 'react-redux';
 import { addShippingAsync, addBillingAsync } from '../../redux/payment-api-slice';
 import useStyles from './styles';
-import Swal from 'sweetalert2/dist/sweetalert2';
 
 
 const AddressForm = ({ checkoutToken, cart, nextStep }) => {
+    // import styles from ./styles.js
     const classes = useStyles();
-    const [checked, setChecked] = useState(true);
-    const [shippingCountries, setShippingCountries] = useState([]);
-    const [shippingCountry, setShippingCountry] = useState('');
-    const [checkSt, setCheckSt] = useState('');
-    const [zipStatus, checkZipStatus] = useState('');
-    const [shippingSubdivisions, setShippingSubdivisions] = useState([]);
-    const [shippingSubdivision, setShippingSubdivision] = useState('');
-    const [shippingOptions, setShippingOptions] = useState([]);
-    const [shippingOption, setShippingOption] = useState('');
-    const [firstName, setFirstName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [address1, setAddress1] = useState('');
-    const [email, setEmail] = useState('');
-    const [city, setCity] = useState('');
-    const [zip, setZip] = useState('');
-    const [billingFirstName, setBillingFirstName] = useState('');
-    const [billingLastName, setBillingLastName] = useState('');
-    const [billingAddress1, setBillingAddress1] = useState('');
-    const [billingCity, setBillingCity] = useState('');
-    const [billingZip, setBillingZip] = useState('');
-    const [billingCountry, setBillingCountry] = useState('');
-    const [billingSubdivision, setBillingSubdivision] = useState('');
-    const dispatch = useDispatch();
-    const Swal = require('sweetalert2')
 
+// ## Initializing states
+
+    // for billing info switch
+    const [checked, setChecked] = useState(true);
+
+    // for shipping countries API call
+    const [shippingCountries, setShippingCountries] = useState([]);
+
+    // for shipping subdivisions API call
+    const [shippingSubdivisions, setShippingSubdivisions] = useState([]);
+
+    // for shipping options API call
+    const [shippingOptions, setShippingOptions] = useState([]);
+
+    // for selected shipping option
+    const [shippingOption, setShippingOption] = useState('');
+
+    // for selected shipping country
+    const [shippingCountry, setShippingCountry] = useState('');
+
+    // for selected shipping subdivision
+    const [shippingSubdivision, setShippingSubdivision] = useState('');
+
+    // for zip & state confirmation function
+    const [checkSt, setCheckSt] = useState('');
+
+    // for shipping first name
+    const [firstName, setFirstName] = useState('');
+
+    // for shipping last name
+    const [lastName, setLastName] = useState('');
+
+    // for shipping address 1
+    const [address1, setAddress1] = useState('');
+
+    // for shipping email
+    const [email, setEmail] = useState('');
+
+    // for shipping city
+    const [city, setCity] = useState('');
+
+    // for shipping zip
+    const [zip, setZip] = useState('');
+
+    // for billing first name
+    const [billingFirstName, setBillingFirstName] = useState('');
+
+    // for billing last name
+    const [billingLastName, setBillingLastName] = useState('');
+
+    // for billing address 1
+    const [billingAddress1, setBillingAddress1] = useState('');
+
+    // for billing city
+    const [billingCity, setBillingCity] = useState('');
+
+    // for billing zip
+    const [billingZip, setBillingZip] = useState('');
+
+    // for billing country
+    const [billingCountry, setBillingCountry] = useState('');
+
+    // for billing subdivision
+    const [billingSubdivision, setBillingSubdivision] = useState('');
+
+    // redux toolkit dispatch hook
+    const dispatch = useDispatch();
+
+    // imports Sweet Alert component
+    const Swal = require('sweetalert2');
+
+    // creates structured shipping data object
     const shippingData = {
         firstName: firstName,
         lastName: lastName,
@@ -48,6 +96,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         shippingOption: shippingOption,
     }
 
+    // creates structured billingData object
     const billingData = {
         firstName: billingFirstName,
         lastName: billingLastName,
@@ -58,115 +107,142 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         billingSubdivision: billingSubdivision,
     }
 
+    // creates react-hook-form methods objecct
     const methods = useForm();
+
+    // maps shipping countries into countries array
     const countries = Object.entries(shippingCountries).map(([code, name]) => ({ id: code, label: name }));
+
+    // maps shipping subdivisions into subdivisions array
     const subdivisions = Object.entries(shippingSubdivisions).map(([code, name]) => ({ id: code, label: name }));
+
+    // maps shipping options into options array
     const options = shippingOptions.map((sO) => ({ id: sO.id, label: `${sO.description} - (${sO.price.formatted_with_symbol})`}));
 
+// ## Component Functions
+
+    // asyncronous call to commerce js for shipping country options
     const fetchShippingCountries = async (checkoutToken) => {
         const { countries } = await commerce.services.localeListShippingCountries(checkoutToken.id);
         setShippingCountries(countries);
         setShippingCountry(Object.keys(countries)[0])
     }
 
+    // asyncronous call to commerce js for shipping subdivision options based on selected country
     const fetchSubdivisions = async (countryCode) => {
         const { subdivisions } = await commerce.services.localeListSubdivisions(countryCode);
         setShippingSubdivisions(subdivisions);
         setShippingSubdivision(Object.keys(subdivisions)[0]);
     }
 
+    // asyncronous call to commerce js to get shipping options for selected country & subdivision
     const fetchShippingOptions = async (checkoutToken, country, region = null) => {
         const options = await commerce.checkout.getShippingOptions(checkoutToken.id, { country, region });
         setShippingOptions(options);
         setShippingOption(options[0].id);
     }
 
+    // dispatches redux action with shipping data payload when shipping data changes
     useEffect(() => {
         dispatch(addShippingAsync(shippingData))
         // eslint-disable-next-line
     }, [shippingData])
 
+    // dispatches redux action with billing data payload when billing data changes
     useEffect(() => {
         dispatch(addBillingAsync(billingData))
         // eslint-disable-next-line
     }, [billingData])
 
-    useEffect(() => {
-        dispatch(addShippingAsync(shippingData))
-        // eslint-disable-next-line
-    }, [zip])
-
+    // runs shipping countries fetch when cart contents change
     useEffect(() => {
         fetchShippingCountries(checkoutToken.id);
         // eslint-disable-next-line
     }, [cart])
 
+    // runs shipping subdivisions fetch when shipping country changes
     useEffect(() => {
         if(shippingCountry) fetchSubdivisions(shippingCountry);
     }, [shippingCountry]);
 
+    // runs shipping options fetch when shipping subdivision changes
     useEffect(() => {
         if(shippingSubdivision) fetchShippingOptions(checkoutToken.id, shippingCountry, shippingSubdivision);
     // eslint-disable-next-line
     }, [shippingSubdivision])
 
+    // shipping first name on change event handler
     const handleFirstNameChange = event => {
         setFirstName(event.target.value);
       };
     
+    // billing first name on change event handler
     const handleBillingFirstNameChange = event => {
         setBillingFirstName(event.target.value);
       };
     
+    // shipping last name on change event handler
     const handleLastNameChange = event => {
         setLastName(event.target.value);
     };
 
+    // billing last name on change event handler
     const handleBillingLastNameChange = event => {
         setBillingLastName(event.target.value);
     };
 
+    // shipping address 1 on change event handler
     const handleAddress1Change = event => {
         setAddress1(event.target.value);
     };
 
+    // billing address 1 on change event handler
     const handleBillingAddress1Change = event => {
         setBillingAddress1(event.target.value);
     };
     
+    // email on change event handler
     const handleEmailChange = event => {
         setEmail(event.target.value);
         };
 
+    // shipping city on change event handler
     const handleCityChange = event => {
         setCity(event.target.value);
         };
     
+    // billing city on change event handler
     const handleBillingCityChange = event => {
         setBillingCity(event.target.value);
         };
 
+    // shipping zip on change event handler
     const handleZipChange = event => {
         setZip(event.target.value);
         };
     
+    // billing zip on change event handler
     const handleBillingZipChange = event => {
         setBillingZip(event.target.value);
         };
 
+    // shipping subdivision on change event handler
     const handleShippingSubdivisionChange = event => {
         setShippingSubdivision(event.target.value)
         };
 
+    // billing subdivision on change event handler
     const handleBillingSubdivisionChange = event => {
         setBillingSubdivision(event.target.value)
         };
 
+    // billing address switch on change event handler
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             setChecked(event.target.checked);
             console.log('billing address switch changed')
         };
     
+    // passes shipping zip, returns state the zip resides in
     const getState = (zipString) => {
 
         /* Ensure param is a string to prevent unpredictable parsing results */
@@ -352,7 +428,9 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         setCheckSt(st);
         return st;
         }
-
+    
+    // Checks zipcode getState response against shipping subdivision, returns error if there's no match
+    // Sends user to next step in checkout if there is a match.
     const zipCheck = () => {
         if (checkSt === shippingSubdivision) {
             nextStep();
@@ -366,6 +444,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         }
     };
     
+    // Checks for State when zip changes
     useEffect(() => {
         getState(zip);
     },[zip]);
