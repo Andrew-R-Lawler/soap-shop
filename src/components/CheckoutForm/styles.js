@@ -18,5 +18,8 @@ export default makeStyles((theme) => ({
     },
     switch: {
         margin: '0px 0px 10px 0px'
+    },
+    confirmationDiv: {
+        margin: '10px 0px 0px 20px'
     }
 }))
