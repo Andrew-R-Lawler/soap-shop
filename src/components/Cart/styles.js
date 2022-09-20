@@ -29,4 +29,7 @@ export default makeStyles((theme) => ({
   media: {
     height: 260,
   },
+  header: {
+    margin: '0px 0px 20px 0px'
+  }
 }));

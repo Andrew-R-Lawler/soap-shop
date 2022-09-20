@@ -6,6 +6,7 @@ import { commerce } from '../../lib/commerce';
 import { useDispatch } from 'react-redux';
 import { addShippingAsync, addBillingAsync } from '../../redux/payment-api-slice';
 import useStyles from './styles';
+import Swal from 'sweetalert2/dist/sweetalert2';
 
 
 const AddressForm = ({ checkoutToken, cart, nextStep }) => {
@@ -33,6 +34,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
     const [billingCountry, setBillingCountry] = useState('');
     const [billingSubdivision, setBillingSubdivision] = useState('');
     const dispatch = useDispatch();
+    const Swal = require('sweetalert2')
 
     const shippingData = {
         firstName: firstName,
@@ -355,7 +357,12 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         if (checkSt === shippingSubdivision) {
             nextStep();
         } else {
-            alert(`ZIP code must be a valid ${shippingSubdivision} code`)
+            Swal.fire({
+                title: 'Error!',
+                text: `Provided ZIP code is not valid for ${shippingSubdivision}`,
+                icon: 'error',
+                confirmationButtonText: 'Back',
+            })
         }
     };
     
