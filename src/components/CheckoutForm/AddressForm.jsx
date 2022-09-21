@@ -38,6 +38,9 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
     // for zip & state confirmation function
     const [checkSt, setCheckSt] = useState('');
 
+    // for zip & state confirmation function
+    const [checkState, setCheckState] = useState('');
+
     // for shipping first name
     const [firstName, setFirstName] = useState('');
 
@@ -229,6 +232,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
     // shipping subdivision on change event handler
     const handleShippingSubdivisionChange = event => {
         setShippingSubdivision(event.target.value)
+        console.log(event.target)
         };
 
     // billing subdivision on change event handler
@@ -239,7 +243,6 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
     // billing address switch on change event handler
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             setChecked(event.target.checked);
-            console.log('billing address switch changed')
         };
     
     // passes shipping zip, returns state the zip resides in
@@ -324,6 +327,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         } else if (zipcode >= 20600 && zipcode <= 21999) {
             st = 'MD';
             state = 'Maryland';
+            // eslint-disable-next-line
         } else if ( (zipcode >= 1000 && zipcode <= 2799) || (zipcode == 5501) || (zipcode == 5544 ) ) {
             st = 'MA';
             state = 'Massachusetts';
@@ -363,6 +367,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         } else if (zipcode >= 87000 && zipcode <= 88499) {
             st = 'NM';
             state = 'New Mexico';
+            // eslint-disable-next-line
         } else if ( (zipcode >= 10000 && zipcode <= 14999) || (zipcode == 6390) || (zipcode == 501) || (zipcode == 544) ) {
             st = 'NY';
             state = 'New York';
@@ -402,6 +407,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         } else if (zipcode >= 5000 && zipcode <= 5999) {
             st = 'VT';
             state = 'Vermont';
+            // eslint-disable-next-line
         } else if ( (zipcode >= 20100 && zipcode <= 20199) || (zipcode >= 22000 && zipcode <= 24699) || (zipcode == 20598) ) {
             st = 'VA';
             state = 'Virginia';
@@ -425,6 +431,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
             state = 'none';
             console.log('No state found matching', zipcode);
         }
+        setCheckState(state);
         setCheckSt(st);
         return st;
         }
@@ -474,7 +481,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
                         <InputLabel>Shipping Subdivision</InputLabel>
                         <Select value={shippingSubdivision} fullWidth onChange={handleShippingSubdivisionChange}>
                             {subdivisions.map((subdivision) => (
-                                <MenuItem key={subdivision.id} value={subdivision.id}>{subdivision.label}</MenuItem>
+                                <MenuItem key={subdivision.id} value={subdivision.id} name={subdivision.label}>{subdivision.label}</MenuItem>
                             ))}
                         </Select>
                     </Grid>

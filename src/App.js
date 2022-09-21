@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { commerce } from './lib/commerce';
 import { Cart, Products, Navbar, Checkout } from './components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import HomePage from './components/HomePage/HomePage';
+import Support from './components/Support/Support';
 
 const App = () => {
 
@@ -83,9 +85,11 @@ const App = () => {
         <div>
                 <Navbar cart={cart} />
             <Routes>
-                <Route path='/' element={<Products products={products} onAddToCart={handleAddToCart}/>} />
+                <Route path='/' element={<HomePage />} />
+                <Route path='/products' element={<Products products={products} onAddToCart={handleAddToCart}/>} />
                 <Route path='/cart' element={<Cart cart={cart} handleUpdateCartQty={handleUpdateCartQty} handleRemoveFromCart={handleRemoveFromCart} handleEmptyCart={handleEmptyCart} />} />
                 <Route path='/checkout' element={<Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} refreshCart={refreshCart} />}/>
+                <Route path='/support' element={<Support />} />
             </Routes>
         </div>
     </Router>

@@ -46,7 +46,7 @@ export const NavDrawer = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem key='products' disablePadding>
-                        <ListItemButton component={Link} to='/'>
+                        <ListItemButton component={Link} to='/products'>
                             <ListItemIcon>
                                 <SellIcon />
                             </ListItemIcon>
@@ -62,7 +62,7 @@ export const NavDrawer = () => {
                         </ListItemButton>
                     </ListItem>
                     <ListItem key='products' disablePadding>
-                        <ListItemButton>
+                        <ListItemButton component={Link} to='/support'>
                             <ListItemIcon>
                                 <HelpCenterIcon />
                             </ListItemIcon>

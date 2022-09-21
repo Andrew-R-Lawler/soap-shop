@@ -7,13 +7,12 @@ import { Link } from 'react-router-dom';
 const Cart = ({ cart, handleUpdateCartQty, handleRemoveFromCart, handleEmptyCart }) => {
     const classes = useStyles();
     // formatted string for EmptyCart text
-    const addProducts = ' ' + 'start adding some!'
+    const addProducts = ' start adding some!';
 
     // This component renders when there are no items in the customer's cart
     const EmptyCart = () => (
         <div style={{margin: '10px 0px 0px 20px'}} >
-        <Typography variant="subtitle1">You have no items in your shopping cart<Link to='/' className={classes.link}>{addProducts}</Link> </Typography>
-        
+        <Typography variant="subtitle1">You have no items in your shopping cart<Link to='/products' className={classes.link}>{addProducts}</Link></Typography>
         </div>
     );
 

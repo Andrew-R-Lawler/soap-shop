@@ -28,7 +28,23 @@ const Navbar = ({ cart }) => {
                         Web Shop
                     </Typography>
                     <div className={classes.grow} />
-                        {/* if pathname is at root Shopping cart will render into Navbar */}
+                        {/* if pathname is /products Shopping cart will render into Navbar */}
+                        { location.pathname === '/products' && (
+                            <div className={classes.button}>
+                                <IconButton component={Link} to='/cart' aria-label="Show cart items" color="inherit">
+                                    { cartLoading ? 
+                                        <Badge badgeContent={0} color="secondary">
+                                            <ShoppingCart />
+                                        </Badge>
+                                        :
+                                        <Badge badgeContent={cart.total_items} color="secondary" overlap='rectangular'>
+                                            <ShoppingCart />
+                                        </Badge>
+                                    }
+                                </IconButton>
+                            </div>
+                        )}
+                        {/* if pathname is at root shopping cart will render into Navbar */}
                         { location.pathname === '/' && (
                             <div className={classes.button}>
                                 <IconButton component={Link} to='/cart' aria-label="Show cart items" color="inherit">
