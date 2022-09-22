@@ -2,10 +2,8 @@ const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const passport = require('passport');
-const passportLocal = require('passport-local');
-const session = require('express-session');
-const cookieParser= require('cookie-parser');
+const sessionMiddleware = require('./modules/session-middleware');
+const passport = require('./strategies/user.strategy');
 
 require('dotenv').config();
 
@@ -13,24 +11,24 @@ require('dotenv').config();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// express session middleware
-app.use(session({
-  secret: 'secretcode',
-  resave: true,
-  saveUninitialized: true,
-}))
-
 // Cors middleware
 app.use(cors({
   origin: "http://localhost:3000", // location of react app
   credentials: true,
 }));
 
+// Passport Session Configuration
+app.use(sessionMiddleware);
+
+// start up passport sessions
+app.use(passport.initialize());
+app.use(passport.session());
+
 // Route includes
-const loginRouter = require('./routes/login_router');
+const userRouter = require('./routes/user.router');
 
 // Routes
-app.use('/api/login', loginRouter);
+app.use('/api/login', userRouter);
 
 // Serve static files
 app.use(express.static('build'));
