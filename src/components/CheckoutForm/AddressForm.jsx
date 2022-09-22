@@ -6,6 +6,11 @@ import { commerce } from '../../lib/commerce';
 import { useDispatch } from 'react-redux';
 import { addShippingAsync, addBillingAsync } from '../../redux/payment-api-slice';
 import useStyles from './styles';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 
 const AddressForm = ({ checkoutToken, cart, nextStep }) => {
@@ -13,6 +18,9 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
     const classes = useStyles();
 
 // ## Initializing states
+
+    // for zip error dialog alert
+    const [open, setOpen] = useState(false);
 
     // for billing info switch
     const [checked, setChecked] = useState(true);
@@ -82,9 +90,6 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
 
     // redux toolkit dispatch hook
     const dispatch = useDispatch();
-
-    // imports Sweet Alert component
-    const Swal = require('sweetalert2');
 
     // creates structured shipping data object
     const shippingData = {
@@ -442,12 +447,7 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
         if (checkSt === shippingSubdivision) {
             nextStep();
         } else {
-            Swal.fire({
-                title: 'Error!',
-                text: `Provided ZIP code is not valid for ${shippingSubdivision}`,
-                icon: 'error',
-                confirmationButtonText: 'Back',
-            })
+            setOpen(true);
         }
     };
     
@@ -532,6 +532,23 @@ const AddressForm = ({ checkoutToken, cart, nextStep }) => {
                 </div>
             </form>
         </FormProvider>
+        <Dialog
+            open={open}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+        >
+        <DialogTitle id="alert-dialog-title">
+          The ZIP code you provided is not inside of {shippingSubdivision}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            In order to proceed to payment you must provide a valid address.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={() => setOpen(false)}>Close</Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

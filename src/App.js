@@ -4,6 +4,7 @@ import { Cart, Products, Navbar, Checkout } from './components';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
 import Support from './components/Support/Support';
+import LogIn from './components/LogIn/LogIn';
 
 const App = () => {
 
@@ -90,6 +91,7 @@ const App = () => {
                 <Route path='/cart' element={<Cart cart={cart} handleUpdateCartQty={handleUpdateCartQty} handleRemoveFromCart={handleRemoveFromCart} handleEmptyCart={handleEmptyCart} />} />
                 <Route path='/checkout' element={<Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} refreshCart={refreshCart} />}/>
                 <Route path='/support' element={<Support />} />
+                <Route path='/login' element={<LogIn />} />
             </Routes>
         </div>
     </Router>
