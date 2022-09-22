@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import HomePage from './components/HomePage/HomePage';
 import Support from './components/Support/Support';
 import LogIn from './components/LogIn/LogIn';
+import Register from './components/Register/Register';
 
 const App = () => {
 
@@ -92,6 +93,7 @@ const App = () => {
                 <Route path='/checkout' element={<Checkout cart={cart} order={order} onCaptureCheckout={handleCaptureCheckout} error={errorMessage} refreshCart={refreshCart} />}/>
                 <Route path='/support' element={<Support />} />
                 <Route path='/login' element={<LogIn />} />
+                <Route path='/register' element={<Register />} />
             </Routes>
         </div>
     </Router>
