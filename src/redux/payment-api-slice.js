@@ -17,6 +17,9 @@ export const paymentSlice = createSlice({
         },
         registerUser: (state, action) => {
             state.register = action.payload
+        },
+        loginUser: (state, action) => {
+            state.user = action.payload
         }
     }
 });
@@ -25,7 +28,20 @@ export const paymentSlice = createSlice({
 export const registerUserAsync = (data) => async (dispatch) => {
     try {
         console.log(data);
-        await axios.post('http://localhost:5000/api/login/register', {data});
+        await axios.post('http://localhost:5000/api/user/register', {data});
+    } catch (err) {
+        throw new Error(err);
+    }
+}
+
+export const loginUserAsync = (data) => async (dispatch) => {
+    try {
+        const config = {
+            headers: { 'Content-Type': 'application/json' },
+            withCredentials: true,
+          };
+          console.log(data)
+        await axios.post('http://localhost:5000/api/user/login', {username: data.username, password: data.password}, config);
     } catch (err) {
         throw new Error(err);
     }
@@ -50,7 +66,7 @@ export const addBillingAsync = (data) => async (dispatch) => {
 }
 
 // exports dispatch actions
-export const { addShipping, addBilling, registerUser } = paymentSlice.actions;
+export const { addShipping, addBilling, registerUser, loginUser } = paymentSlice.actions;
 
 // exports hooks for accessing store data
 export const showShipping = (state) => state.payment.shipping;

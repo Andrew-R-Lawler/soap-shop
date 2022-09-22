@@ -33,6 +33,7 @@ router.post('/register', async (req, res, next) => {
 // this middleware will run our POST if successful
 // this middleware will send a 404 if not successful
 router.post('/login', userStrategy.authenticate('local'), (req, res) => {
+  console.log(req.body);
   res.sendStatus(200);
 });
 

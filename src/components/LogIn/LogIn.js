@@ -2,18 +2,24 @@ import { Typography, Paper, TextField, Button } from '@material-ui/core'
 import React, { useState } from 'react'
 import useStyles from './styles';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginUserAsync } from '../../redux/payment-api-slice';
 
 const LogIn = () => {
     const classes = useStyles();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const dispatch = useDispatch();
 
     const logInCredentials = {
         username: username,
         password: password,
-    }
+    };
 
-    const login = () => {};
+    const login = () => {
+        dispatch(loginUserAsync(logInCredentials));
+        console.log(logInCredentials)
+    };
 
   return (
     <>

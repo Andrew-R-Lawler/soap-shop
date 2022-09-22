@@ -2,8 +2,8 @@ const express = require("express");
 const app = express();
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const sessionMiddleware = require('./modules/session-middleware');
 const passport = require('./strategies/user.strategy');
+const session = require('express-session');
 
 require('dotenv').config();
 
@@ -17,8 +17,13 @@ app.use(cors({
   credentials: true,
 }));
 
-// Passport Session Configuration
-app.use(sessionMiddleware);
+// Session Configuration
+app.use(session({
+  secret: process.env.SERVER_SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: true }
+}));
 
 // start up passport sessions
 app.use(passport.initialize());
@@ -28,7 +33,7 @@ app.use(passport.session());
 const userRouter = require('./routes/user.router');
 
 // Routes
-app.use('/api/login', userRouter);
+app.use('/api/user', userRouter);
 
 // Serve static files
 app.use(express.static('build'));
