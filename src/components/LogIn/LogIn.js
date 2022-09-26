@@ -1,7 +1,7 @@
 import { Typography, Paper, TextField, Button, Grid } from '@material-ui/core'
 import React, { useState } from 'react'
 import useStyles from './styles';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUserAsync } from '../../redux/payment-api-slice';
 import { fetchUserAsync } from '../../redux/payment-api-slice';
@@ -11,6 +11,7 @@ const LogIn = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const logInCredentials = {
         username: username,
@@ -20,7 +21,9 @@ const LogIn = () => {
     const login = () => {
         dispatch(loginUserAsync(logInCredentials)).then(() => {
             dispatch(fetchUserAsync());
-        })
+        }).then(() => {
+            navigate('/user')
+        });
     };
 
 

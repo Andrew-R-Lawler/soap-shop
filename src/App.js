@@ -8,6 +8,7 @@ import LogIn from './components/LogIn/LogIn';
 import Register from './components/Register/Register';
 import { fetchUserAsync } from './redux/payment-api-slice';
 import { useDispatch } from 'react-redux';
+import User from './components/User/User';
 
 const App = () => {
 
@@ -100,6 +101,7 @@ const App = () => {
                 <Route path='/support' element={<Support />} />
                 <Route path='/login' element={<LogIn />} />
                 <Route path='/register' element={<Register />} />
+                <Route path='/user' element={<User />} />
             </Routes>
         </div>
     </Router>
