@@ -6,7 +6,8 @@ import HomePage from './components/HomePage/HomePage';
 import Support from './components/Support/Support';
 import LogIn from './components/LogIn/LogIn';
 import Register from './components/Register/Register';
-import { fetchUser } from './redux/payment-api-slice';
+import { fetchUserAsync } from './redux/payment-api-slice';
+import { useDispatch } from 'react-redux';
 
 const App = () => {
 
@@ -23,6 +24,9 @@ const App = () => {
 
     // for cart items
     const [cart, setCart] = useState({});
+
+    // for redux dispatch
+    const dispatch = useDispatch();
 
 // Generating Functions
 
@@ -81,6 +85,7 @@ const App = () => {
     useEffect(() => {
         fetchProducts();
         fetchCart();
+        dispatch(fetchUserAsync());
     }, []);
 
   return (

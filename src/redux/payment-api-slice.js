@@ -82,6 +82,7 @@ export const { addShipping, addBilling, registerUser, loginUser, fetchUser } = p
 // exports hooks for accessing store data
 export const showShipping = (state) => state.payment.shipping;
 export const showBilling = (state) => state.payment.billing;
+export const showUser = (state) => state.payment.user;
 
 export default paymentSlice.reducer;
 
