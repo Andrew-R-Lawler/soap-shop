@@ -83,7 +83,7 @@ const Navbar = ({ cart }) => {
                         { user ? 
                              <Typography>logged in</Typography>
                             :
-                            <Button component={Link} to='/login'>Log In/Register</Button> 
+                            <Button component={Link} to='/login'>Log In</Button> 
                         }
                             
                 </Toolbar>

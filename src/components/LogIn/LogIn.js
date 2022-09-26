@@ -10,7 +10,6 @@ const LogIn = () => {
     const classes = useStyles();
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const [loginState, setLoginState] = useState(false);
     const dispatch = useDispatch();
 
     const logInCredentials = {
@@ -33,14 +32,13 @@ const LogIn = () => {
         <div style={{ display: 'flex', justifyContent: 'center'}}>
             <Paper className={classes.paper}>
                 <Typography variant="h4" align="center">Sign-In</Typography>
-                <div style={{ margin: '0px 0px 20x 0px'}} />
+                <div style={{ margin: '0px 0px 20px 0px'}} />
                 <Grid container spacing={3}>
                     <Grid item xs={6} sm={6}><TextField value={username} id='username' label='Username' onChange={(event) => {setUsername(event.target.value)}} /></Grid>
                     <Grid item xs={6} sm={6}><TextField value={password} id='password' label='Password' type='password' onChange={(event) => {setPassword(event.target.value)}} /></Grid>
                 </Grid>
                 <div style={{display: 'flex', justifyContent: 'space-between', margin: '20px 0px 0px 0px'}}>
-                    <Typography variant='subtitle2'>Don't have an account?</Typography>
-                    <Typography variant='subtitle2' component={Link} to='/register'>Register Account</Typography>
+                    <Typography variant='subtitle2' component={Link} to='/register'>Don't have an account? Sign Up</Typography>
                     <Button onClick={login} variant='contained' color='primary' >Submit</Button>
                 </div>
             </Paper>
