@@ -4,12 +4,16 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const passport = require('./strategies/user.strategy');
 const session = require('express-session');
+const cookieParser = require("cookie-parser");
 
 require('dotenv').config();
 
 // Body parser middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+// cookie parser middleware
+app.use(cookieParser(process.env.SERVER_SESSION_SECRET));
 
 // Cors middleware
 app.use(cors({
@@ -22,7 +26,6 @@ app.use(session({
   secret: process.env.SERVER_SESSION_SECRET,
   resave: false,
   saveUninitialized: true,
-  cookie: { secure: true }
 }));
 
 // start up passport sessions

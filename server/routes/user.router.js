@@ -20,7 +20,6 @@ router.post('/register', async (req, res, next) => {
   const username = req.body.data.username;
   const email = req.body.data.email;
   const password = await encryptLib.encryptPassword(req.body.data.password);
-  console.log(password)
 
   const queryText = 'INSERT INTO "user" (username, email, password) VALUES ($1, $2 ,$3) RETURNING id';
   pool.query(queryText, [username, email, password])
@@ -33,7 +32,6 @@ router.post('/register', async (req, res, next) => {
 // this middleware will run our POST if successful
 // this middleware will send a 404 if not successful
 router.post('/login', userStrategy.authenticate('local'), (req, res) => {
-  console.log(req.body);
   res.sendStatus(200);
 });
 

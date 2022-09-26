@@ -19,7 +19,10 @@ export const paymentSlice = createSlice({
             state.register = action.payload
         },
         loginUser: (state, action) => {
-            state.user = action.payload
+            state.login = action.payload
+        },
+        fetchUser: (state, action) => {
+            state.user =  action.payload
         }
     }
 });
@@ -40,11 +43,19 @@ export const loginUserAsync = (data) => async (dispatch) => {
             headers: { 'Content-Type': 'application/json' },
             withCredentials: true,
           };
-          console.log(data)
         await axios.post('http://localhost:5000/api/user/login', {username: data.username, password: data.password}, config);
     } catch (err) {
         throw new Error(err);
     }
+}
+
+export const fetchUserAsync = (data) => async (dispatch) => {
+    const config = {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+      };
+    const response = await axios.get('http://localhost:5000/api/user/', config);
+    dispatch(fetchUser(response.data))
 }
 
 // dispatches shipping data to redux store
@@ -66,7 +77,7 @@ export const addBillingAsync = (data) => async (dispatch) => {
 }
 
 // exports dispatch actions
-export const { addShipping, addBilling, registerUser, loginUser } = paymentSlice.actions;
+export const { addShipping, addBilling, registerUser, loginUser, fetchUser } = paymentSlice.actions;
 
 // exports hooks for accessing store data
 export const showShipping = (state) => state.payment.shipping;
